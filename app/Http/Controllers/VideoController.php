@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\VideoResource;
+use App\Http\Traits\HasComments;
 use App\Models\Video;
 use Illuminate\Http\Request;
 
 class VideoController extends Controller
 {
+    use HasComments;
+    
     public function index()
     {
         return $this->handleSuccessResponse(
@@ -56,5 +59,19 @@ class VideoController extends Controller
             'Vídeo obtido com sucesso.',
             new VideoResource($video)
         );
+    }
+
+    public function comentarios(string $id)
+    {
+        $video = Video::find($id);
+        if(!$video) {
+            return $this->handleErrorResponse(
+                'Vídeo não encontrado.',
+                null,
+                404
+            );
+        }
+
+        return $this->getCommentsForModel($video);
     }
 }

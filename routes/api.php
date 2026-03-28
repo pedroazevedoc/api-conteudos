@@ -23,12 +23,14 @@ Route::prefix('v1')->group(function () {
         Route::post('/',    [PostController::class, 'store']);
         Route::get('/',     [PostController::class, 'index']);
         Route::get('/{id}', [PostController::class, 'show']);
+        Route::get('/{id}/comentarios', [PostController::class, 'comentarios']);
     })->middleware('auth:sanctum');
 
     Route::prefix('videos')->group(function () {
         Route::post('/',    [VideoController::class, 'store']);
         Route::get('/',     [VideoController::class, 'index']);
         Route::get('/{id}', [VideoController::class, 'show']);
+        Route::get('/{id}/comentarios', [VideoController::class, 'comentarios']);
     })->middleware('auth:sanctum');
 
     Route::prefix('comentarios')->group(function () {

@@ -16,7 +16,6 @@ class ComentarioResource extends JsonResource
     {
         return [
             'content'   => $this->content,
-            'commentable' => $this->commentable,
             'user' => [
                 'name'  => $this->user->name,
                 'email' => $this->user->email
