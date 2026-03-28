@@ -42,7 +42,7 @@ class PostController extends Controller
 
     public function show(string $id)
     {
-        $post = new PostResource(Post::with('user')->find($id));
+        $post = Post::with('user')->find($id);
         if(!$post) {
             return $this->handleErrorResponse(
                 'Post não encontrado.',
@@ -53,7 +53,7 @@ class PostController extends Controller
 
         return $this->handleSuccessResponse(
             'Post obtido com sucesso.',
-            $post
+            new PostResource($post)
         );
     }
 }

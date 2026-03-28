@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -18,7 +17,7 @@ class UserController extends Controller
 
     public function show(string $id)
     {
-        $user = new UserResource(User::find($id));
+        $user = User::find($id);
         if(!$user) {
             return $this->handleErrorResponse(
                 'Usuário não encontrado.', 
@@ -29,7 +28,7 @@ class UserController extends Controller
 
         return $this->handleSuccessResponse(
             'Usuário obtido com sucesso.', 
-            $user
+            new UserResource($user),
         );
     }
 }
