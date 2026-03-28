@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VideoController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -21,5 +22,11 @@ Route::prefix('v1')->group(function () {
         Route::get('/',     [PostController::class, 'index']);
         Route::get('/{id}', [PostController::class, 'show']);
         Route::post('/',    [PostController::class, 'store']);
+    })->middleware('auth:sanctum');
+
+    Route::prefix('videos')->group(function () {
+        Route::get('/',     [VideoController::class, 'index']);
+        Route::get('/{id}', [VideoController::class, 'show']);
+        Route::post('/',    [VideoController::class, 'store']);
     })->middleware('auth:sanctum');
 });
