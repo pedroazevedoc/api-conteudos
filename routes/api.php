@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VideoController;
@@ -19,14 +20,21 @@ Route::prefix('v1')->group(function () {
     })->middleware('auth:sanctum');
 
     Route::prefix('posts')->group(function () {
+        Route::post('/',    [PostController::class, 'store']);
         Route::get('/',     [PostController::class, 'index']);
         Route::get('/{id}', [PostController::class, 'show']);
-        Route::post('/',    [PostController::class, 'store']);
     })->middleware('auth:sanctum');
 
     Route::prefix('videos')->group(function () {
+        Route::post('/',    [VideoController::class, 'store']);
         Route::get('/',     [VideoController::class, 'index']);
         Route::get('/{id}', [VideoController::class, 'show']);
-        Route::post('/',    [VideoController::class, 'store']);
+    })->middleware('auth:sanctum');
+
+    Route::prefix('comentarios')->group(function () {
+        Route::post('/',       [ComentarioController::class, 'store']);
+        Route::get('/',        [ComentarioController::class, 'index']);
+        Route::get('/{id}',    [ComentarioController::class, 'show']);
+        Route::delete('/{id}', [ComentarioController::class, 'destroy']);
     })->middleware('auth:sanctum');
 });
