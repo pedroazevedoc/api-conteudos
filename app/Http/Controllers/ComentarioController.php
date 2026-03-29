@@ -11,13 +11,18 @@ class ComentarioController extends Controller
     public function index(Request $request)
     {
         $validated = $request->validate([
-            'type' => 'string|in:Post,Video'
+            'type' => 'nullable|string'
         ]);
 
+        // Obtém todos os comentários
+        $comentarios = Comentario::all();
+
         // Se o tipo for fornecido, filtra os comentários pelo tipo
-        $comentarios = Comentario::with('user')
-            ->where('commentable_type', $this->getModelClass($validated['type']))
-            ->get();
+        if (isset($validated['type'])) {
+            $comentarios = $comentarios->filter(function ($comentario) use ($validated) {
+                return $comentario->commentable_type === $this->getModelClass($validated['type']);
+            });
+        }
 
         return $this->handleSuccessResponse(
             'Listagem de comentários obtidos com sucesso.', 
