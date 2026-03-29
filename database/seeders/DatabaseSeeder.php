@@ -20,17 +20,21 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Admin',
                 'email' => 'admin@email.com',
-                'password' => Hash::make(123456)
+                'password' => Hash::make(123456),
+                'role' => 'admin'
             ],
             [
                 'name' => 'Usuário',
                 'email' => 'user@email.com',
-                'password' => Hash::make(123456)
+                'password' => Hash::make(123456),
+                'role' => 'user'
             ]
         ];
 
         foreach ($users as $user) {
-            User::create($user);
+            if (!User::where('email', $user['email'])->exists()) {
+                User::create($user);
+            }
         }
     }
 }
