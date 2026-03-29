@@ -46,11 +46,7 @@ class ComentarioController extends Controller
         ]);
 
         if (!$comentario) {
-            return $this->handleErrorResponse(
-                'Erro ao criar o comentário.',
-                null,
-                400
-            );
+            return $this->handleErrorResponse('Erro ao criar o comentário.', null, 400);
         }
 
         return $this->handleSuccessResponse(
@@ -64,11 +60,7 @@ class ComentarioController extends Controller
     {
         $comentario = Comentario::with('user')->find($id);
         if(!$comentario) {
-            return $this->handleErrorResponse(
-                'Comentário não encontrado.',
-                null,
-                404
-            );
+            return $this->handleErrorResponse('Comentário não encontrado.', null, 404);
         }
 
         return $this->handleSuccessResponse(

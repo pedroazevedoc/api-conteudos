@@ -32,11 +32,7 @@ class PostController extends Controller
         ]);
 
         if (!$post) {
-            return $this->handleErrorResponse(
-                'Erro ao criar o post.',
-                null,
-                400
-            );
+            return $this->handleErrorResponse('Erro ao criar o post.', null, 400);
         }
 
         return $this->handleSuccessResponse(
@@ -50,11 +46,7 @@ class PostController extends Controller
     {
         $post = Post::with('user')->find($id);
         if(!$post) {
-            return $this->handleErrorResponse(
-                'Post não encontrado.',
-                null,
-                404
-            );
+            return $this->handleErrorResponse('Post não encontrado.', null, 404);
         }
 
         return $this->handleSuccessResponse(
@@ -67,11 +59,7 @@ class PostController extends Controller
     {
         $post = Post::find($id);
         if(!$post) {
-            return $this->handleErrorResponse(
-                'Post não encontrado.',
-                null,
-                404
-            );
+            return $this->handleErrorResponse('Post não encontrado.', null, 404);
         }
 
         return $this->getCommentsForModel($post);

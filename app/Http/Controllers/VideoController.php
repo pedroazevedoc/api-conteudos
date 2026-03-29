@@ -33,11 +33,7 @@ class VideoController extends Controller
         ]);
         
         if (!$video) {
-            return $this->handleErrorResponse(
-                'Erro ao criar o vídeo.',
-                null,
-                400
-            );
+            return $this->handleErrorResponse('Erro ao criar o vídeo.', null, 400);
         }
 
         return $this->handleSuccessResponse(
@@ -51,11 +47,7 @@ class VideoController extends Controller
     {
         $video = Video::with('user')->find($id);
         if(!$video) {
-            return $this->handleErrorResponse(
-                'Vídeo não encontrado.',
-                null,
-                404
-            );
+            return $this->handleErrorResponse('Vídeo não encontrado.', null, 404);
         }
 
         return $this->handleSuccessResponse(
@@ -68,11 +60,7 @@ class VideoController extends Controller
     {
         $video = Video::find($id);
         if(!$video) {
-            return $this->handleErrorResponse(
-                'Vídeo não encontrado.',
-                null,
-                404
-            );
+            return $this->handleErrorResponse('Vídeo não encontrado.', null, 404);
         }
 
         return $this->getCommentsForModel($video);
