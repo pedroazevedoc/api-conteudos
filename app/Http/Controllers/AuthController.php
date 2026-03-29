@@ -25,14 +25,14 @@ class AuthController extends Controller
 
         $token = $user->createToken('api-token', ['post:read', 'post:create']);
 
-        return response()->json([
-            'status' => 'success',
-            'response' => 'Usuário registrado com sucesso',
-            'payload' => [
+        return $this->handleSuccessResponse(
+            'Usuário registrado com sucesso',
+            [
                 'user' => $user,
                 'token' => $token->plainTextToken
-            ]
-        ], 201);
+            ],
+            201
+        );
     }
 
     function login(Request $request) {
@@ -46,43 +46,45 @@ class AuthController extends Controller
 
             $token = $user->createToken('api-token', ['post:read', 'post:create']);
 
-            return response()->json([
-                'status' => 'success',
-                'response' => 'Usuário logado com sucesso',
-                'payload' => [
+            return $this->handleSuccessResponse(
+                'Usuário logado com sucesso',
+                [
                     'user' => $user,
                     'token' => $token->plainTextToken
                 ]
-            ], 200);
+            );
         }
 
-        return response()->json([
-            'status' => 'error',
-            'response' => 'Credenciais inválidas'
-        ], 401);
+        return $this->handleErrorResponse(
+            'Credenciais inválidas',
+            null,
+            401
+        );
     }
 
     function logout(Request $request) {
         $token = $request->bearerToken();
         if (!$token) {
-            return response()->json([
-                'status' => 'error',
-                'response' => 'Token não fornecido'
-            ], 400);
+            return $this->handleErrorResponse(
+                'Token não fornecido',
+                null,
+                400
+            );
         }
 
         $access_token = PersonalAccessToken::findToken($token);
         if(!$access_token) {
-            return response()->json([
-                'status' => 'error',
-                'response' => 'Token inválido'
-            ], 400);
+            return $this->handleErrorResponse(
+                'Token inválido',
+                null,
+                400
+            );
         }
 
         $access_token->delete();
-        return response()->json([
-            'status' => 'success',
-            'response' => 'Usuário deslogado com sucesso'
-        ], 200);
+        return $this->handleSuccessResponse(
+            'Usuário deslogado com sucesso',
+            null
+        );
     }
 }
