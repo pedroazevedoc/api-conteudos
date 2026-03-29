@@ -24,7 +24,7 @@ class VideoController extends Controller
         $validated = $request->validate([
             'title' => 'required|string',
             'url' => 'required|string',
-            'description' => 'string',
+            'description' => 'nullable|string',
             'user_id' => 'required|exists:users,id'
         ]);
 
