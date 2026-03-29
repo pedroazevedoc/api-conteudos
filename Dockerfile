@@ -53,6 +53,7 @@ RUN mkdir -p /var/www/html/storage/logs && \
 
 RUN git config --global --add safe.directory /var/www/html
 
-RUN composer install --no-interaction --prefer-dist
+RUN composer install --no-interaction --prefer-dist && \
+    chown -R www-data:www-data /var/www/html
 
 ENTRYPOINT apache2-foreground
