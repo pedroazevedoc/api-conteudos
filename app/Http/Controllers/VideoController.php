@@ -25,10 +25,13 @@ class VideoController extends Controller
             'title' => 'required|string',
             'url' => 'required|string',
             'description' => 'nullable|string',
-            'user_id' => 'required|exists:users,id'
         ]);
 
-        $video = Video::create($validated);
+        $video = Video::create([
+            ...$validated,
+            'user_id' => auth()->user()->id
+        ]);
+        
         if (!$video) {
             return $this->handleErrorResponse(
                 'Erro ao criar o vídeo.',

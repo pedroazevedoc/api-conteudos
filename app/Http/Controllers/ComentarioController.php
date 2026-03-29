@@ -31,7 +31,6 @@ class ComentarioController extends Controller
             'content' => 'required|string',
             'commentable_id' => 'required|integer',
             'commentable_type' => 'required|string|in:Post,Video',
-            'user_id' => 'required|exists:users,id'
         ]);
 
         // Verificar se o commentable_id existe na tabela correta
@@ -40,9 +39,12 @@ class ComentarioController extends Controller
             'commentable_id' => "exists:$table,id"
         ]);
 
-        $validated['commentable_type'] = $this->getModelClass($validated['commentable_type']);
+        $comentario = Comentario::create([
+            ...$validated,
+            'commentable_type' => $this->getModelClass($validated['commentable_type']),
+            'user_id' => auth()->user()->id
+        ]);
 
-        $comentario = Comentario::create($validated);
         if (!$comentario) {
             return $this->handleErrorResponse(
                 'Erro ao criar o comentário.',

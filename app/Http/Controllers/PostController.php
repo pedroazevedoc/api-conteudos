@@ -24,10 +24,13 @@ class PostController extends Controller
         $validated = $request->validate([
             'title' => 'required|string',
             'content' => 'required|string',
-            'user_id' => 'required|exists:users,id'
         ]);
 
-        $post = Post::create($validated);
+        $post = Post::create([
+            ...$validated,
+            'user_id' => auth()->user()->id
+        ]);
+
         if (!$post) {
             return $this->handleErrorResponse(
                 'Erro ao criar o post.',
