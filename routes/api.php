@@ -14,29 +14,31 @@ Route::prefix('v1')->group(function () {
         Route::post('/logout',   [AuthController::class, 'logout']);
     });
 
-    Route::prefix('users')->group(function () {
-        Route::get('/',     [UserController::class, 'index']);
-        Route::get('/{id}', [UserController::class, 'show']);
-    })->middleware('auth:sanctum');
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::prefix('users')->group(function () {
+            Route::get('/',     [UserController::class, 'index']);
+            Route::get('/{id}', [UserController::class, 'show']);
+        });
 
-    Route::prefix('posts')->group(function () {
-        Route::post('/',    [PostController::class, 'store']);
-        Route::get('/',     [PostController::class, 'index']);
-        Route::get('/{id}', [PostController::class, 'show']);
-        Route::get('/{id}/comentarios', [PostController::class, 'comentarios']);
-    })->middleware('auth:sanctum');
+        Route::prefix('posts')->group(function () {
+            Route::post('/',    [PostController::class, 'store'])->middleware('ability:post-store');
+            Route::get('/',     [PostController::class, 'index']);
+            Route::get('/{id}', [PostController::class, 'show']);
+            Route::get('/{id}/comentarios', [PostController::class, 'comentarios']);
+        });
 
-    Route::prefix('videos')->group(function () {
-        Route::post('/',    [VideoController::class, 'store']);
-        Route::get('/',     [VideoController::class, 'index']);
-        Route::get('/{id}', [VideoController::class, 'show']);
-        Route::get('/{id}/comentarios', [VideoController::class, 'comentarios']);
-    })->middleware('auth:sanctum');
-
-    Route::prefix('comentarios')->group(function () {
-        Route::post('/',       [ComentarioController::class, 'store']);
-        Route::get('/',        [ComentarioController::class, 'index']);
-        Route::get('/{id}',    [ComentarioController::class, 'show']);
-        Route::delete('/{id}', [ComentarioController::class, 'destroy']);
-    })->middleware('auth:sanctum');
+        Route::prefix('videos')->group(function () {
+            Route::post('/',    [VideoController::class, 'store'])->middleware('ability:video-store');
+            Route::get('/',     [VideoController::class, 'index']);
+            Route::get('/{id}', [VideoController::class, 'show']);
+            Route::get('/{id}/comentarios', [VideoController::class, 'comentarios']);
+        });
+            
+        Route::prefix('comentarios')->group(function () {
+            Route::post('/',       [ComentarioController::class, 'store'])->middleware('ability:comment-store');
+            Route::get('/',        [ComentarioController::class, 'index']);
+            Route::get('/{id}',    [ComentarioController::class, 'show']);
+            Route::delete('/{id}', [ComentarioController::class, 'destroy']);
+        });
+    });
 });

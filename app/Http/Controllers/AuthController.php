@@ -10,7 +10,7 @@ use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {
-    function register(Request $request) {
+    public function register(Request $request) {
         $validated = $request->validate([
             'name' => 'required|string',
             'email' => 'required|email|unique:users,email',
@@ -20,10 +20,11 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password' => Hash::make($validated['password'])
+            'password' => Hash::make($validated['password']),
+            'role' => 'user'
         ]);
 
-        $token = $user->createToken('api-token', ['post:read', 'post:create']);
+        $token = $user->createToken('api-token', ['comment-store']);
 
         return $this->handleSuccessResponse(
             'Usuário registrado com sucesso',
@@ -35,7 +36,7 @@ class AuthController extends Controller
         );
     }
 
-    function login(Request $request) {
+    public function login(Request $request) {
         $validated = $request->validate([
             'email' => 'required|email',
             'password' => 'required|string|min:6'
@@ -44,7 +45,9 @@ class AuthController extends Controller
         if (Auth::attempt($validated)) {
             $user = User::where('email', $validated['email'])->first();
 
-            $token = $user->createToken('api-token', ['post:read', 'post:create']);
+            $abilities = $this->getAbilitiesForRole($user->role);
+
+            $token = $user->createToken('api-token', $abilities);
 
             return $this->handleSuccessResponse(
                 'Usuário logado com sucesso',
@@ -62,7 +65,7 @@ class AuthController extends Controller
         );
     }
 
-    function logout(Request $request) {
+    public function logout(Request $request) {
         $token = $request->bearerToken();
         if (!$token) {
             return $this->handleErrorResponse(
@@ -86,5 +89,14 @@ class AuthController extends Controller
             'Usuário deslogado com sucesso',
             null
         );
+    }
+
+    private function getAbilitiesForRole($role) {
+        $mappedAbilities = [
+            'admin' => ['post-store', 'video-store', 'comment-store'],
+            'user'  => ['comment-store']
+        ];
+
+        return $mappedAbilities[$role] ?? [];
     }
 }
