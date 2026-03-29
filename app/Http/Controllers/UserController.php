@@ -9,6 +9,8 @@ class UserController extends Controller
 {
     public function index()
     {
+        $this->authorize('viewAny', User::class);
+        
         return $this->handleSuccessResponse(
             'Listagem de usuários obtidas com sucesso.', 
             UserResource::collection(User::all())
@@ -19,12 +21,10 @@ class UserController extends Controller
     {
         $user = User::find($id);
         if(!$user) {
-            return $this->handleErrorResponse(
-                'Usuário não encontrado.', 
-                null, 
-                404
-            );
+            return $this->handleErrorResponse('Usuário não encontrado.', null, 404);
         }
+
+        $this->authorize('view', $user);
 
         return $this->handleSuccessResponse(
             'Usuário obtido com sucesso.', 
