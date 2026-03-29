@@ -86,6 +86,15 @@ class ComentarioController extends Controller
             );
         }
 
+        $user = auth()->user();
+        if ($comentario->user_id !== $user->id) {
+            return $this->handleErrorResponse(
+                'Usuário não autorizado a deletar este comentário.',
+                null,
+                403
+            );
+        }
+
         $comentario->delete();
 
         return $this->handleSuccessResponse(
