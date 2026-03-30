@@ -4,10 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ComentarioResource;
 use App\Models\Comentario;
+use Dedoc\Scramble\Attributes\Endpoint;
 use Illuminate\Http\Request;
 
 class ComentarioController extends Controller
 {
+    #[Endpoint(
+        title: 'Listar comentários',
+        description: 'Exibe uma lista de comentários, com opção de filtrar por tipo (Post ou Video).'
+    )]
     public function index(Request $request)
     {
         $validated = $request->validate([
@@ -30,6 +35,10 @@ class ComentarioController extends Controller
         );
     }
 
+    #[Endpoint(
+        title: 'Criar comentário',
+        description: 'Cria um novo comentário em um Post ou Vídeo. O usuário autenticado será definido como autor do comentário.'
+    )]
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -61,6 +70,10 @@ class ComentarioController extends Controller
         );
     }
 
+    #[Endpoint(
+        title: 'Obter comentário',
+        description: 'Obtém os detalhes de um comentário específico, incluindo informações do usuário que o criou.'
+    )]
     public function show(string $id)
     {
         $comentario = Comentario::with('user')->find($id);
@@ -74,6 +87,10 @@ class ComentarioController extends Controller
         );
     }
 
+    #[Endpoint(
+        title: 'Deletar comentário',
+        description: 'Remove um comentário. Apenas o autor do comentário pode deletá-lo.'
+    )]
     public function destroy(string $id)
     {
         $comentario = Comentario::find($id);

@@ -4,9 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Dedoc\Scramble\Attributes\Endpoint;
 
 class UserController extends Controller
 {
+    #[Endpoint(
+        title: 'Listar usuários',
+        description: 'Exibe uma lista de usuários, incluindo informações do autor. Apenas usuários com a role "admin" podem acessar esta rota.'
+    )]
     public function index()
     {
         $this->authorize('viewAny', User::class);
@@ -17,6 +22,10 @@ class UserController extends Controller
         );
     }
 
+    #[Endpoint(
+        title: 'Obter usuário',
+        description: 'Obtém os detalhes de um usuário específico, incluindo informações do autor. Apenas usuários com a role "admin" ou o próprio usuário podem acessar esta rota.'
+    )]
     public function show(string $id)
     {
         $user = User::find($id);

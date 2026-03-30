@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Resources\VideoResource;
 use App\Http\Traits\HasComments;
 use App\Models\Video;
+use Dedoc\Scramble\Attributes\Endpoint;
 use Illuminate\Http\Request;
 
 class VideoController extends Controller
 {
     use HasComments;
     
+    #[Endpoint(
+        title: 'Listar vídeos',
+        description: 'Exibe uma lista de vídeos, incluindo informações do autor.'
+    )]
     public function index()
     {
         return $this->handleSuccessResponse(
@@ -19,6 +24,10 @@ class VideoController extends Controller
         );
     }
 
+    #[Endpoint(
+        title: 'Criar vídeo',
+        description: 'Cria um novo vídeo com o título, URL e descrição especificados. Apenas usuários com a role "admin" podem criar vídeos.'
+    )]
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -43,6 +52,10 @@ class VideoController extends Controller
         );
     }
 
+    #[Endpoint(
+        title: 'Obter vídeo',
+        description: 'Obtém os detalhes de um vídeo específico, incluindo informações do autor.'
+    )]
     public function show(string $id)
     {
         $video = Video::with('user')->find($id);
@@ -56,6 +69,10 @@ class VideoController extends Controller
         );
     }
 
+    #[Endpoint(
+        title: 'Listar comentários de um vídeo',
+        description: 'Exibe uma lista de comentários associados a um vídeo específico.'
+    )]
     public function comentarios(string $id)
     {
         $video = Video::find($id);

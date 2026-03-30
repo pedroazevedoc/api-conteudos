@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Dedoc\Scramble\Attributes\Endpoint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -10,6 +11,10 @@ use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {
+    #[Endpoint(
+        title: 'Registrar usuário',
+        description: 'Registra um novo usuário no sistema.'
+    )]
     public function register(Request $request) {
         $validated = $request->validate([
             'name' => 'required|string',
@@ -36,6 +41,10 @@ class AuthController extends Controller
         );
     }
 
+    #[Endpoint(
+        title: 'Login de usuário',
+        description: 'Realiza o login de um usuário existente.'
+    )]
     public function login(Request $request) {
         $validated = $request->validate([
             'email' => 'required|email',
@@ -65,6 +74,10 @@ class AuthController extends Controller
         );
     }
 
+    #[Endpoint(
+        title: 'Logout de usuário',
+        description: 'Realiza o logout de um usuário autenticado.'
+    )]
     public function logout(Request $request) {
         $token = $request->bearerToken();
         if (!$token) {

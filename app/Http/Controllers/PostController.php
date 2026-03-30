@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Resources\PostResource;
 use App\Http\Traits\HasComments;
 use App\Models\Post;
+use Dedoc\Scramble\Attributes\Endpoint;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
     use HasComments;
 
+    #[Endpoint(
+        title: 'Listar posts',
+        description: 'Exibe uma lista de posts, incluindo informações do autor.'
+    )]
     public function index()
     {
         return $this->handleSuccessResponse(
@@ -19,6 +24,10 @@ class PostController extends Controller
         );
     }
 
+    #[Endpoint(
+        title: 'Criar post',
+        description: 'Cria um novo post com o título e conteúdo especificados. Apenas usuários com a role "admin" podem criar posts.'
+    )]
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -42,6 +51,10 @@ class PostController extends Controller
         );
     }
 
+    #[Endpoint(
+        title: 'Obter post',
+        description: 'Obtém os detalhes de um post específico, incluindo informações do autor.'
+    )]
     public function show(string $id)
     {
         $post = Post::with('user')->find($id);
@@ -55,6 +68,10 @@ class PostController extends Controller
         );
     }
 
+    #[Endpoint(
+        title: 'Listar comentários de um post',
+        description: 'Exibe uma lista de comentários associados a um post específico.'
+    )]
     public function comentarios(string $id)
     {
         $post = Post::find($id);
