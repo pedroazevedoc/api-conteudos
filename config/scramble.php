@@ -29,7 +29,7 @@ return [
         /*
          * Description rendered on the home page of the API documentation (`/docs/api`).
          */
-        'description' => '',
+        'description' => 'API de gerenciamento de conteúdos. Esta API permite criar, ler, atualizar e excluir conteúdos, bem como gerenciar comentários e usuários.',
     ],
 
     /*
