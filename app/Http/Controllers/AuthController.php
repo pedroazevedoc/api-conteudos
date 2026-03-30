@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Dedoc\Scramble\Attributes\Endpoint;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class AuthController extends Controller
     public function register(Request $request) {
         $validated = $request->validate([
             'name' => 'required|string',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|string|email|unique:users,email',
             'password' => 'required|min:6|confirmed'
         ]);
 
@@ -34,7 +35,7 @@ class AuthController extends Controller
         return $this->handleSuccessResponse(
             'Usuário registrado com sucesso',
             [
-                'user' => $user,
+                'user' => new UserResource($user),
                 'token' => $token->plainTextToken
             ],
             201
@@ -61,17 +62,13 @@ class AuthController extends Controller
             return $this->handleSuccessResponse(
                 'Usuário logado com sucesso',
                 [
-                    'user' => $user,
+                    'user' => new UserResource($user),
                     'token' => $token->plainTextToken
                 ]
             );
         }
 
-        return $this->handleErrorResponse(
-            'Credenciais inválidas',
-            null,
-            401
-        );
+        return $this->handleErrorResponse('Credenciais inválidas', null, 401);
     }
 
     #[Endpoint(
@@ -90,17 +87,14 @@ class AuthController extends Controller
 
         $access_token = PersonalAccessToken::findToken($token);
         if(!$access_token) {
-            return $this->handleErrorResponse(
-                'Token inválido',
-                null,
-                400
-            );
+            return $this->handleErrorResponse('Token inválido', null, 400);
         }
 
         $access_token->delete();
         return $this->handleSuccessResponse(
             'Usuário deslogado com sucesso',
-            null
+            null, 
+            204
         );
     }
 
