@@ -23,3 +23,9 @@ migrate: ## Executa as migrações
 
 seed: ## Executa os seeders
 	docker compose exec app php artisan db:seed
+
+key: ## Gera a chave da aplicação
+	docker compose exec app php artisan key:generate
+
+install: ## Instala as dependências com Composer
+	docker compose exec app composer install
