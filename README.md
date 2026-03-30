@@ -47,14 +47,10 @@ cd api-conteudos
 cp .env.example .env
 ```
 
-### Passo 3: Gerar Chave da Aplicação (Necessário)
+### Passo 3: Instalar Dependências do Makefile
 
 ```bash
-# Iniciar containers para acessar o terminal
-make up
-
-# Gerar chave da aplicação
-make key
+sudo apt install make
 ```
 
 ### Passo 4: Construir e Iniciar Containers
@@ -75,25 +71,31 @@ docker compose ps
 - `conteudos-db` (MySQL)
 - `conteudos-phpmyadmin` (Gerenciador DB)
 
-### Passo 5: Instalar Dependências
+
+### Passo 5: Instalar Dependências do Laravel com Composer
 
 ```bash
-# Instalar dependências com Composer
 make install
 ```
 
-### Passo 6: Executar Migrações
+### Passo 6: Gerar Chave da Aplicação
+
+```bash
+make key
+```
+
+### Passo 7: Executar Migrações
 
 ```bash
 make migrate
 ```
 
-### Passo 7: Executar Seeders
+### Passo 8: Executar Seeders
 
 ```bash
 make seed
 ```
-Isso irá popular o banco com os usuários padrão.
+Isso irá popular o banco com os dados de exemplo.
 
 **API rodando em `http://localhost:8000`**
 
@@ -117,6 +119,15 @@ http://localhost:8000/docs/api
 
 ### Importar Coleção Postman
 Importe a coleção `postman_collection.json` para testar os endpoints da API.
+
+### Acessar a API
+Use ferramentas como Postman ou cURL para interagir com os endpoints da API em `http://localhost:8000/api`.
+
+Usuário de teste para autenticação:
+- **Email:** `admin@email.com`
+- **Senha:** `123456`
+
+---
 
 ### Parar os Containers
 
