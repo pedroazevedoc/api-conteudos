@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,7 +30,7 @@ class AuthController extends Controller
         return $this->handleSuccessResponse(
             'Usuário registrado com sucesso',
             [
-                'user' => $user,
+                'user' => new UserResource($user),
                 'token' => $token->plainTextToken
             ],
             201
@@ -52,17 +53,13 @@ class AuthController extends Controller
             return $this->handleSuccessResponse(
                 'Usuário logado com sucesso',
                 [
-                    'user' => $user,
+                    'user' => new UserResource($user),
                     'token' => $token->plainTextToken
                 ]
             );
         }
 
-        return $this->handleErrorResponse(
-            'Credenciais inválidas',
-            null,
-            401
-        );
+        return $this->handleErrorResponse('Credenciais inválidas', null, 401);
     }
 
     public function logout(Request $request) {
@@ -77,17 +74,14 @@ class AuthController extends Controller
 
         $access_token = PersonalAccessToken::findToken($token);
         if(!$access_token) {
-            return $this->handleErrorResponse(
-                'Token inválido',
-                null,
-                400
-            );
+            return $this->handleErrorResponse('Token inválido', null, 400);
         }
 
         $access_token->delete();
         return $this->handleSuccessResponse(
             'Usuário deslogado com sucesso',
-            null
+            null, 
+            204
         );
     }
 
